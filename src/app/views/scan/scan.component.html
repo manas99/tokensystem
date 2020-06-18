@@ -1,0 +1,32 @@
+<div class="container">
+    <div id="cam-container" class="d-flex justify-content-center align-items-center mx-auto" >
+        <span class="my-3">Click on red button to start scanning.</span>
+    </div>
+    <div class="my-2 text-center" *ngIf="!started">
+        <div *ngIf="state == 'error'">
+            <h5>Error</h5>
+            <div>{{message}}</div>
+        </div>
+        <div *ngIf="state == 'token_found'">
+            <h5>Token Found</h5>
+            <div>{{message}}</div>
+            <button type="button" class="btn btn-primary my-2" (click)="acceptToken(message)">Accept Token</button>
+        </div>
+        <div *ngIf="state == 'synced'">
+            <h5>Success</h5>
+            <div>{{message}}</div>
+        </div>
+        <div *ngIf="state == 'shop_found'">
+
+        </div>
+    </div>
+    <div class="d-flex justify-content-center align-items-center" style="position:absolute;bottom:90px;left:0; right:0;">
+        <button class="btn btn-danger p-0 m-0" style="height:50px;width:50px;border-radius:50%;" (click)="captureClick()">
+            <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'>
+                <title>ionicons-v5-e</title>
+                <path d='M448,256c0-106-86-192-192-192S64,150,64,256s86,192,192,192S448,362,448,256Z' style='fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:32px'/>
+            </svg>
+
+        </button>
+    </div>
+</div>

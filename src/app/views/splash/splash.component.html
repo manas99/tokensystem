@@ -1,0 +1,47 @@
+<div style="z-index:-1;position:absolute;right:0;height:100%;width:100%;background: url('/assets/display/waves.svg');background-position:100% 0; background-repeat: no-repeat;"></div>
+
+<div style="position:fixed;top:0;left:0;right:0;bottom:0;">
+    <nav class="navbar navbar-expand">
+        <a href="#" class="navbar-brand font-logo">Pretty<br>Damn<span class="text-primary">Q</span>uick<span class="text-primary">.</span></a>
+
+        <div class="navbar-nav mr-0 ml-auto text-white">
+            <div *ngIf="auth_.user$ | async; then authenticated else guest">
+
+            </div>
+        </div>
+    </nav>
+    <div class="jumbotron">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-5 mt-4 mt-sm-0">
+                    <p>During this Pandemic,</p>
+                    <span class="display-4 font-logo">Stay Safe</span>
+                    <p class="lead">By practising <b>Social Distancing</b>.</p>
+
+                    <p class="lead font-italic">We help you to bypass the Queue at your local shops!</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div style="position:absolute;bottom:0; left:0;">
+        <div class="mb-3 ml-3">
+            <a class="mx-3" href="#">About</a>
+            <a class="mx-3" href="#">Blog</a>
+            <a class="mx-3" href="#">Contact</a>
+        </div>
+    </div>
+</div>
+
+<ng-template #guest>
+    <a class="nav-item nav-link text-white" href="#" (click)="login()">Login</a>
+</ng-template>
+
+
+<!-- User logged in -->
+<ng-template #authenticated>
+    <a class="nav-item nav-link text-white" routerLink="/home">Go to Home</a>
+    <!--<li class="nav-item" *ngIf="auth_.user$ | async as user">
+        <img style="height:35px;width:35px;border-radius:50%;" [src]="user.photoURL">
+    </li>-->
+</ng-template>

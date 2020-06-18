@@ -1,0 +1,359 @@
+<div class="container">
+    <div class="d-flex align-items-center mb-3">
+        <h3 class="font-logo mb-0" *ngIf="!store_id">Add Store</h3>
+        <h3 class="font-logo mb-0" *ngIf="store_id">Store Settings</h3>
+    </div>
+
+    <div class="sticky-top py-3 sticky-header">
+        <div class="d-flex align-items-center">
+            Status: <span class="text-danger ml-1" *ngIf="!storeForm.is_verified">Unverified.</span>
+                <span class="text-success ml-1" *ngIf="storeForm.is_verified">Verified.</span>
+            <div id="status" class="ml-auto mr-1">
+                <span class="text-danger" *ngIf="state == 'error'">Error</span>
+                <span class="text-warning" *ngIf="state == 'modified'">Modified</span>
+                <span class="text-warning" *ngIf="state == 'saving'">Saving...</span>
+                <span class="text-success" *ngIf="state == 'synced'">Synced</span>
+            </div>
+        </div>
+        <small class="text-muted" *ngIf="!storeForm.is_verified">Status will be updated when verification is performed.</small>
+    </div>
+
+    <div class="p-3">
+        <h5>General Details</h5>
+
+        <input type="text" class="form-control my-3" placeholder="Store Name" [(ngModel)]="storeForm.name">
+
+        <div class="input-group my-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="country-code">{{storeForm.phone_prefix}}</span>
+            </div>
+            <!--<input id="country-code" type="text" class="input-group-prepend input-group-text" value="+91">-->
+            <input type="number" class="form-control" placeholder="Phone Number" aria-label="Phone Number" aria-describedby="country-code" [(ngModel)]="storeForm.phone">
+		</div>
+
+        <input type="text" class="form-control my-3" placeholder="City" [(ngModel)]="storeForm.city">
+
+        <input type="text" class="form-control my-3" placeholder="Location or Area" [(ngModel)]="storeForm.location">
+        <div class="d-flex w-100">
+            <button type="submit" class="btn btn-primary ml-auto mr-0" (click)="onSubmitStore()">Save</button>
+        </div>
+    </div>
+
+    <div class="p-3" *ngIf="store_id">
+        <h5>Employees</h5>
+        <div *ngIf="employeesForm.length > 0" >
+            <div class="d-flex my-3 align-items-center" *ngFor="let emp of employeesForm; let i=index">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" [id]="'country-code-emp-'+i">{{emp.phone_prefix}}</span>
+                    </div>
+                    <input id="phone-input" type="number" class="form-control" placeholder="Phone Number" aria-label="Phone Number" [attr.aria-describedby]="'country-code-emp-'+i" [(ngModel)]="emp.phone">
+                </div>
+
+                <button type="button" class="btn btn-light mx-1 btn-sm" (click)="removeEmployee(emp, i)">Remove</button>
+            </div>
+        </div>
+
+        <div *ngIf="employeesForm.length == 0" class="my-2">
+            <span class="text-muted">Add Employees who will be allowed to scan tokens.</span>
+        </div>
+
+        <div class="d-flex w-100 my-2">
+            <button type="button" class="btn btn-light mr-0 ml-auto btn-sm" (click)="addEmployee()">Add Employee</button>
+        </div>
+        <div class="d-flex w-100 my-2">
+            <button type="submit" class="btn btn-primary mr-0 ml-auto" (click)="onSubmitEmployee()">Save</button>
+        </div>
+
+    </div>
+
+    <div class="p-3" *ngIf="store_id">
+        <h5>Working Hours</h5>
+
+        <div class="accordion my-3" id="workingHoursAcc">
+
+            <div class="card">
+                <h2 class="mb-0" id="headingMon">
+                    <button class="btn btn-link btn-block text-left p-2" type="button" data-toggle="collapse" data-target="#workingHoursMon" aria-expanded="false" aria-controls="workingHoursMon">
+                        Monday
+                    </button>
+                </h2>
+                <div id="workingHoursMon" class="collapse" aria-labelledby="headingMon" data-parent="#workingHoursAcc">
+                    <div class="p-2">
+                        <div class="row m-0 mb-1" *ngFor="let x of whsForm.monday; let i = index;">
+                            <div class="col-md-5 d-flex p-0">
+                                <input appDateTimePicker [timeOnly]="true" type="time" class="form-control my-1 mr-1 mx-md-1" placeholder="Start Time" [(ngModel)]="x.start">
+                                <input appDateTimePicker [timeOnly]="true" type="time" class="form-control my-1 ml-1 mx-md-1" placeholder="End Time" [(ngModel)]="x.end">
+                            </div>
+                            <div class="col-md-5 d-flex p-0">
+                                <input type="number" class="form-control my-1 mr-1 mx-md-1" placeholder="Minutes per Slot" [(ngModel)]="x.slot_duration">
+                                <input type="number" class="form-control my-1 ml-1 mx-md-1" placeholder="Tokens per Slot" [(ngModel)]="x.tokens_per_slot">
+                            </div>
+                            <div class="col-md p-0 d-flex align-items-center">
+                                <button type="button" class="btn btn-light my-1 mr-1 mx-md-auto ml-auto btn-sm" (click)="removeWorkingHour('monday', i)">Remove</button>
+                            </div>
+                        </div>
+
+                        <div class="mb-2" *ngIf="whsForm.monday.length == 0">
+                            <span class="text-muted">No Working hours scheduled.</span>
+                        </div>
+
+                        <div class="d-flex w-100 mt-2">
+                            <button type="button" class="btn btn-light ml-auto mr-2 btn-sm" (click)="addWorkingHour('monday')">Add Working Hour</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="mb-0" id="headingTue">
+                    <button class="btn btn-link btn-block text-left p-2" type="button" data-toggle="collapse" data-target="#workingHoursTue" aria-expanded="false" aria-controls="workingHoursTue">
+                        Tuesday
+                    </button>
+                </h2>
+                <div id="workingHoursTue" class="collapse" aria-labelledby="headingTue" data-parent="#workingHoursAcc">
+                    <div class="p-2">
+                        <div class="row m-0 mb-1" *ngFor="let x of whsForm.tuesday; let i = index;">
+                            <div class="col-md-5 d-flex p-0">
+                                <input appDateTimePicker [timeOnly]="true" type="time" class="form-control my-1 mr-1 mx-md-1" placeholder="Start Time" [(ngModel)]="x.start">
+                                <input appDateTimePicker [timeOnly]="true" type="time" class="form-control my-1 ml-1 mx-md-1" placeholder="End Time" [(ngModel)]="x.end">
+                            </div>
+                            <div class="col-md-5 d-flex p-0">
+                                <input type="number" class="form-control my-1 mr-1 mx-md-1" placeholder="Minutes per Slot" [(ngModel)]="x.slot_duration">
+                                <input type="number" class="form-control my-1 ml-1 mx-md-1" placeholder="Tokens per Slot" [(ngModel)]="x.tokens_per_slot">
+                            </div>
+                            <div class="col-md p-0 d-flex align-items-center">
+                                <button type="button" class="btn btn-light my-1 mr-1 mx-md-auto ml-auto btn-sm" (click)="removeWorkingHour('tuesday', i)">Remove</button>
+                            </div>
+                        </div>
+
+                        <div class="mb-2" *ngIf="whsForm.tuesday.length == 0">
+                            <span class="text-muted">No Working hours scheduled.</span>
+                        </div>
+
+                        <div class="d-flex w-100 mt-2">
+                            <button type="button" class="btn btn-light ml-auto mr-2 btn-sm" (click)="addWorkingHour('tuesday')">Add Working Hour</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="mb-0" id="headingWed">
+                    <button class="btn btn-link btn-block text-left p-2" type="button" data-toggle="collapse" data-target="#workingHoursWed" aria-expanded="false" aria-controls="workingHoursWed">
+                        Wednesday
+                    </button>
+                </h2>
+                <div id="workingHoursWed" class="collapse" aria-labelledby="headingWed" data-parent="#workingHoursAcc">
+                    <div class="p-2">
+                        <div class="row m-0 mb-1" *ngFor="let x of whsForm.wednesday; let i = index;">
+                            <div class="col-md-5 d-flex p-0">
+                                <input appDateTimePicker [timeOnly]="true" type="time" class="form-control my-1 mr-1 mx-md-1" placeholder="Start Time" [(ngModel)]="x.start">
+                                <input appDateTimePicker [timeOnly]="true" type="time" class="form-control my-1 ml-1 mx-md-1" placeholder="End Time" [(ngModel)]="x.end">
+                            </div>
+                            <div class="col-md-5 d-flex p-0">
+                                <input type="number" class="form-control my-1 mr-1 mx-md-1" placeholder="Minutes per Slot" [(ngModel)]="x.slot_duration">
+                                <input type="number" class="form-control my-1 ml-1 mx-md-1" placeholder="Tokens per Slot" [(ngModel)]="x.tokens_per_slot">
+                            </div>
+                            <div class="col-md p-0 d-flex align-items-center">
+                                <button type="button" class="btn btn-light my-1 mr-1 mx-md-auto ml-auto btn-sm" (click)="removeWorkingHour('wednesday', i)">Remove</button>
+                            </div>
+                        </div>
+
+                        <div class="mb-2" *ngIf="whsForm.wednesday.length == 0">
+                            <span class="text-muted">No Working hours scheduled.</span>
+                        </div>
+
+                        <div class="d-flex w-100 mt-2">
+                            <button type="button" class="btn btn-light ml-auto mr-2 btn-sm" (click)="addWorkingHour('wednesday')">Add Working Hour</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="mb-0" id="headingThu">
+                    <button class="btn btn-link btn-block text-left p-2" type="button" data-toggle="collapse" data-target="#workingHoursThu" aria-expanded="false" aria-controls="workingHoursThu">
+                        Thursday
+                    </button>
+                </h2>
+                <div id="workingHoursThu" class="collapse" aria-labelledby="headingThu" data-parent="#workingHoursAcc">
+                    <div class="p-2">
+                        <div class="row m-0 mb-1" *ngFor="let x of whsForm.thursday; let i = index;">
+                            <div class="col-md-5 d-flex p-0">
+                                <input appDateTimePicker [timeOnly]="true" type="time" class="form-control my-1 mr-1 mx-md-1" placeholder="Start Time" [(ngModel)]="x.start">
+                                <input appDateTimePicker [timeOnly]="true" type="time" class="form-control my-1 ml-1 mx-md-1" placeholder="End Time" [(ngModel)]="x.end">
+                            </div>
+                            <div class="col-md-5 d-flex p-0">
+                                <input type="number" class="form-control my-1 mr-1 mx-md-1" placeholder="Minutes per Slot" [(ngModel)]="x.slot_duration">
+                                <input type="number" class="form-control my-1 ml-1 mx-md-1" placeholder="Tokens per Slot" [(ngModel)]="x.tokens_per_slot">
+                            </div>
+                            <div class="col-md p-0 d-flex align-items-center">
+                                <button type="button" class="btn btn-light my-1 mr-1 mx-md-auto ml-auto btn-sm" (click)="removeWorkingHour('thursday', i)">Remove</button>
+                            </div>
+                        </div>
+
+                        <div class="mb-2" *ngIf="whsForm.thursday.length == 0">
+                            <span class="text-muted">No Working hours scheduled.</span>
+                        </div>
+
+                        <div class="d-flex w-100 mt-2">
+                            <button type="button" class="btn btn-light ml-auto mr-2 btn-sm" (click)="addWorkingHour('thursday')">Add Working Hour</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="mb-0" id="headingFri">
+                    <button class="btn btn-link btn-block text-left p-2" type="button" data-toggle="collapse" data-target="#workingHoursFri" aria-expanded="false" aria-controls="workingHoursFri">
+                        Friday
+                    </button>
+                </h2>
+                <div id="workingHoursFri" class="collapse" aria-labelledby="headingFri" data-parent="#workingHoursAcc">
+                    <div class="p-2">
+                        <div class="row m-0 mb-1" *ngFor="let x of whsForm.friday; let i = index;">
+                            <div class="col-md-5 d-flex p-0">
+                                <input appDateTimePicker [timeOnly]="true" type="time" class="form-control my-1 mr-1 mx-md-1" placeholder="Start Time" [(ngModel)]="x.start">
+                                <input appDateTimePicker [timeOnly]="true" type="time" class="form-control my-1 ml-1 mx-md-1" placeholder="End Time" [(ngModel)]="x.end">
+                            </div>
+                            <div class="col-md-5 d-flex p-0">
+                                <input type="number" class="form-control my-1 mr-1 mx-md-1" placeholder="Minutes per Slot" [(ngModel)]="x.slot_duration">
+                                <input type="number" class="form-control my-1 ml-1 mx-md-1" placeholder="Tokens per Slot" [(ngModel)]="x.tokens_per_slot">
+                            </div>
+                            <div class="col-md p-0 d-flex align-items-center">
+                                <button type="button" class="btn btn-light my-1 mr-1 mx-md-auto ml-auto btn-sm" (click)="removeWorkingHour('friday', i)">Remove</button>
+                            </div>
+                        </div>
+
+                        <div class="mb-2" *ngIf="whsForm.friday.length == 0">
+                            <span class="text-muted">No Working hours scheduled.</span>
+                        </div>
+
+                        <div class="d-flex w-100 mt-2">
+                            <button type="button" class="btn btn-light ml-auto mr-2 btn-sm" (click)="addWorkingHour('friday')">Add Working Hour</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="mb-0" id="headingSat">
+                    <button class="btn btn-link btn-block text-left p-2" type="button" data-toggle="collapse" data-target="#workingHoursSat" aria-expanded="false" aria-controls="workingHoursSat">
+                        Saturday
+                    </button>
+                </h2>
+                <div id="workingHoursSat" class="collapse" aria-labelledby="headingSat" data-parent="#workingHoursAcc">
+                    <div class="p-2">
+                        <div class="row m-0 mb-1" *ngFor="let x of whsForm.saturday; let i = index;">
+                            <div class="col-md-5 d-flex p-0">
+                                <input appDateTimePicker [timeOnly]="true" type="time" class="form-control my-1 mr-1 mx-md-1" placeholder="Start Time" [(ngModel)]="x.start">
+                                <input appDateTimePicker [timeOnly]="true" type="time" class="form-control my-1 ml-1 mx-md-1" placeholder="End Time" [(ngModel)]="x.end">
+                            </div>
+                            <div class="col-md-5 d-flex p-0">
+                                <input type="number" class="form-control my-1 mr-1 mx-md-1" placeholder="Minutes per Slot" [(ngModel)]="x.slot_duration">
+                                <input type="number" class="form-control my-1 ml-1 mx-md-1" placeholder="Tokens per Slot" [(ngModel)]="x.tokens_per_slot">
+                            </div>
+                            <div class="col-md p-0 d-flex align-items-center">
+                                <button type="button" class="btn btn-light my-1 mr-1 mx-md-auto ml-auto btn-sm" (click)="removeWorkingHour('saturday', i)">Remove</button>
+                            </div>
+                        </div>
+
+                        <div class="mb-2" *ngIf="whsForm.saturday.length == 0">
+                            <span class="text-muted">No Working hours scheduled.</span>
+                        </div>
+
+                        <div class="d-flex w-100 mt-2">
+                            <button type="button" class="btn btn-light ml-auto mr-2 btn-sm" (click)="addWorkingHour('saturday')">Add Working Hour</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="mb-0" id="headingSun">
+                    <button class="btn btn-link btn-block text-left p-2" type="button" data-toggle="collapse" data-target="#workingHoursSun" aria-expanded="false" aria-controls="workingHoursSun">
+                        Sunday
+                    </button>
+                </h2>
+                <div id="workingHoursSun" class="collapse" aria-labelledby="headingSun" data-parent="#workingHoursAcc">
+                    <div class="p-2">
+                        <div class="row m-0 mb-1" *ngFor="let x of whsForm.sunday; let i = index;">
+                            <div class="col-md-5 d-flex p-0">
+                                <input appDateTimePicker [timeOnly]="true" type="time" class="form-control my-1 mr-1 mx-md-1" placeholder="Start Time" [(ngModel)]="x.start">
+                                <input appDateTimePicker [timeOnly]="true" type="time" class="form-control my-1 ml-1 mx-md-1" placeholder="End Time" [(ngModel)]="x.end">
+                            </div>
+                            <div class="col-md-5 d-flex p-0">
+                                <input type="number" class="form-control my-1 mr-1 mx-md-1" placeholder="Minutes per Slot" [(ngModel)]="x.slot_duration">
+                                <input type="number" class="form-control my-1 ml-1 mx-md-1" placeholder="Tokens per Slot" [(ngModel)]="x.tokens_per_slot">
+                            </div>
+                            <div class="col-md p-0 d-flex align-items-center">
+                                <button type="button" class="btn btn-light my-1 mr-1 mx-md-auto ml-auto btn-sm" (click)="removeWorkingHour('sunday', i)">Remove</button>
+                            </div>
+                        </div>
+
+                        <div class="mb-2" *ngIf="whsForm.sunday.length == 0">
+                            <span class="text-muted">No Working hours scheduled.</span>
+                        </div>
+
+                        <div class="d-flex w-100 mt-2">
+                            <button type="button" class="btn btn-light ml-auto mr-2 btn-sm" (click)="addWorkingHour('sunday')">Add Working Hour</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex w-100 my-2">
+            <button type="submit" class="btn btn-primary mr-0 ml-auto" (click)="onSubmitWorkingHours()">Save</button>
+        </div>
+
+        <!--<div *ngIf="workingHours.length > 0">
+            <div class="row my-2 mx-0" *ngFor="let emp of workingHours; let i=index">
+                <div class="col-md-2 p-0 mx-md-1">
+                    <select class="form-control my-1">
+                        <option value="">Monday</option>
+                        <option value="">Tuesday</option>
+                        <option value="">Wednesday</option>
+                        <option value="">Thursday</option>
+                        <option value="">Friday</option>
+                        <option value="">Saturday</option>
+                        <option value="">Sunday</option>
+                    </select>
+                </div>
+                <div class="col-md-4 d-flex p-0">
+                    <input type="time" class="form-control my-1 mr-1 mx-md-1" placeholder="Start Time">
+                    <input type="time" class="form-control my-1 ml-1 mx-md-1" placeholder="End Time">
+                </div>
+                <div class="col-md-4 d-flex p-0">
+                    <input type="number" class="form-control my-1 mr-1 mx-md-1" placeholder="Minutes per Slot">
+                    <input type="number" class="form-control my-1 ml-1 mx-md-1" placeholder="Tokens per Slot">
+                </div>
+                <div class="col-md p-0 d-flex align-items-center">
+                    <button type="button" class="btn btn-light my-1 mr-1 ml-auto btn-sm" (click)="removeSchedule(i)">Remove</button>
+                </div>
+            </div>
+        </div>
+
+        <!--<div *ngIf="workingHours.length == 0" class="my-2">
+            <span class="text-muted">Add Schedule to distribute tokens.</span>
+        </div>-->
+    </div>
+
+    <div class="d-flex justify-content-center my-2" *ngIf="store_id">
+        <button class="btn btn-light" (click)="generatePDF()">Download PDF</button>
+    </div>
+
+    <div class="d-none">
+        <div #pdfContainer>
+            <div class="p-4 d-flex flex-column justify-content-center">
+                <div class="h3">
+                    Pretty<br>Damn<span class="text-primary">Q</span>uick<span class="text-primary">.</span>
+                </div>
+                <div #qrContainer>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

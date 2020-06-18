@@ -1,0 +1,35 @@
+<div class="container">
+    <div class="my-2 d-flex align-items-center">
+        <select class="form-control" [(ngModel)]="selected_store" (change)="storeChanged()">
+            <option *ngFor="let x of stores| keyvalue" [value]="x.key">{{x.value.name}} - {{x.value.location}}, {{x.value.city}}</option>
+        </select>
+        <a [routerLink]="['/stores', 'edit', selected_store]" class="btn btn-primary mx-1" *ngIf="isOwner()">Edit</a>
+    </div>
+    <!--<div class="my-2">
+        <app-date-slider [weekStart]="'mon'" [minDate]="minDate" [maxDate]="maxDate" (dateChanged)="dateChanged($event)"></app-date-slider>
+    </div>-->
+    <div class="my-2">
+        <h4>Tokens for <span class="text-primary">{{selected_date.format("Do MMM, YYYY")}}</span></h4>
+    </div>
+    <div class="my-2" *ngIf="activeTokens | async as active_">
+        <h5>Active Tokens</h5>
+        <div class="card my-1 p-3" *ngFor="let tok of active_">
+            <span [class.text-muted]="tok.status !== 1" class="d-block">Time: {{moment(tok.slot_obj.toDate()).format("H:mm")}}</span>
+            <span [class.text-muted]="tok.status !== 1" class="d-block">Identifier: {{tok.uuid}}</span>
+            <a [routerLink]="['/scan', tok.uuid]" class="stretched-link"></a>
+        </div>
+        <div class="text-muted text-center my-4" *ngIf="active_.length == 0">
+            <h3>No active tokens.</h3>
+        </div>
+    </div>
+    <div class="my-2" *ngIf="otherTokens | async as other_">
+        <h5>Accepted Tokens</h5>
+        <div class="card my-1 p-3" *ngFor="let tok of other_">
+            <span [class.text-muted]="tok.status !== 1" class="d-block">Time: {{moment(tok.slot_obj.toDate()).format("H:mm")}}</span>
+            <span [class.text-muted]="tok.status !== 1" class="d-block">Identifier: {{tok.uuid}}</span>
+        </div>
+        <div class="text-muted text-center my-4" *ngIf="other_.length == 0">
+            <h3>No completed tokens.</h3>
+        </div>
+    </div>
+</div>

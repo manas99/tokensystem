@@ -1,0 +1,37 @@
+<div class="container">
+    <div class="d-flex align-items-center mb-2">
+        <div>
+            <h3 class="font-logo ml-0 mr-auto mb-0">Stores</h3>
+        </div>
+        <a class="btn btn-primary btn-sm ml-auto mr-0 text-white" routerLink="/stores/add">Add Store</a>
+    </div>
+    <div class="sticky-top sticky-header py-3">
+        <input type="text" class="form-control" placeholder="Search for your Store" [(ngModel)]="search" (keyup)="onKeyUp()" (keydown)="onKeyDown()">
+    </div>
+    <div class="">
+        <div class="card my-1 p-3" *ngFor="let store of page.data | async">
+            <span class="m-0 h5 d-inline-block">{{store.name}}</span>
+            {{store.location}} - {{store.city}}
+            <a [routerLink]="['/store', store.slug]" class="stretched-link"></a>
+        </div>
+        <div class="text-muted text-center my-4" *ngIf="page.done | async">
+            <h3>Reached the End.</h3>
+        </div>
+        <div class="text-center my-4">
+            <button class="btn btn-primary" *ngIf="!(page.loading|async) && !(page.done|async)" (click)="page.more()">Show More</button>
+        </div>
+        <app-inline-loading *ngIf="page.loading|async"></app-inline-loading>
+    </div>
+    <!--<div *ngIf="stores_| async as stores;">
+        <div *ngIf="stores.length > 0 && state != 'error'" class="py-2">
+            <div class="card my-1 p-3" *ngFor="let store of stores">
+                <span class="m-0 h5 d-inline-block">{{store.name}}</span>
+                {{store.location}}, {{store.city}}
+            </div>
+        </div>
+        <div class="text-muted text-center my-4" *ngIf="stores.length == 0">
+            <h3>No Stores Found.</h3>
+        </div>
+    </div>-->
+
+</div>

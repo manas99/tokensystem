@@ -1,0 +1,55 @@
+
+    <nav class="my-header navbar navbar-expand">
+        <a href="#" class="navbar-brand font-logo">Pretty<br>Damn<span class="text-primary">Q</span>uick<span class="text-primary">.</span></a>
+
+        <div class="navbar-nav mr-0 ml-auto text-white">
+            <div *ngIf="user; then authenticated else guest">
+
+            </div>
+        </div>
+    </nav>
+
+<div class="">
+    <router-outlet></router-outlet>
+</div>
+<div class="tab-buffer">
+</div>
+<div class="tab-container">
+    <div class="tab-display d-flex">
+        <a routerLink="/my-tokens" class="btn mx-auto tab-button d-flex flex-column justify-content-center align-items-center">
+            <div class="tab-icon mx-auto" style="background: url(assets/icons/ionicons/qr-code.svg);"></div>
+            <span class="tab-text mx-auto">My Tokens</span>
+        </a>
+        <a routerLink="/stores" class="btn mx-auto tab-button d-flex flex-column justify-content-center align-items-center">
+            <div class="tab-icon mx-auto" style="background: url(assets/icons/ionicons/business.svg);"></div>
+            <span class="tab-text mx-auto">Stores</span>
+        </a>
+        <a routerLink="/scan" class="btn mx-auto tab-button d-flex flex-column justify-content-center align-items-center">
+            <div class="tab-icon mx-auto" style="background: url(assets/icons/ionicons/scan.svg);"></div>
+            <span class="tab-text mx-auto">Scan</span>
+        </a>
+        <a routerLink="/stores/manage" class="btn mx-auto tab-button d-flex flex-column justify-content-center align-items-center" *ngIf="has_stores">
+            <div class="tab-icon mx-auto" style="background: url(assets/icons/ionicons/apps.svg);"></div>
+            <span class="tab-text mx-auto">My Stores</span>
+        </a>
+        <!--<a href="#" class="btn mx-auto tab-button d-flex flex-column justify-content-center align-items-center">
+            <div class="tab-icon mx-auto" style="background: url(assets/icons/ionicons/010-bell.svg);"></div>
+            <span class="tab-text mx-auto">Alerts</span>
+        </a>-->
+    </div>
+</div>
+
+
+<ng-template #guest>
+    <a class="nav-item nav-link" (click)="openSideMenu(false)">
+        <img class="icon" src="assets/icons/ionicons/reorder-two-sharp.svg">
+    </a>
+</ng-template>
+
+
+<!-- User logged in -->
+<ng-template #authenticated>
+    <a class="nav-item nav-link" *ngIf="user" (click)="openSideMenu(true)">
+        <img class="display-picture" [src]="user.photoURL">
+    </a>
+</ng-template>

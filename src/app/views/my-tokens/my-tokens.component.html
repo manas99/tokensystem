@@ -1,0 +1,37 @@
+<div class="container">
+    <div class="d-flex align-items-center mb-3">
+        <h3 class="font-logo ml-0 mr-auto mb-0">My Tokens</h3>
+    </div>
+    <div class="my-2">
+        <div *ngIf="auth_.user$ | async; then authenticated else guest">
+
+        </div>
+    </div>
+</div>
+
+
+<ng-template #guest>
+    <div class="text-center my-2">
+        <h4 class="text-muted">Please Login to see your tokens.</h4>
+    </div>
+</ng-template>
+
+
+<!-- User logged in -->
+<ng-template #authenticated>
+    <div class="">
+        <div class="card my-1 p-3" *ngFor="let tok of page.data | async">
+            <span [class.text-muted]="tok.status !== 1" class="m-0 h5 d-block">{{tok.store_name}}</span>
+            <span [class.text-muted]="tok.status !== 1" class="d-block">Date & Time: {{moment(tok.slot_obj.toDate())}}</span>
+            <span [class.text-muted]="tok.status !== 1" class="d-block">Identifier: {{tok.uuid}}</span>
+            <a [routerLink]="['/token', tok.uuid]" class="stretched-link"></a>
+        </div>
+        <div class="text-muted text-center my-4" *ngIf="page.done | async">
+            <h3>Reached the End.</h3>
+        </div>
+        <div class="text-center my-4">
+            <button class="btn btn-primary" *ngIf="!(page.loading|async) && !(page.done|async)" (click)="page.more()">Show More</button>
+        </div>
+        <app-inline-loading *ngIf="page.loading|async"></app-inline-loading>
+    </div>
+</ng-template>

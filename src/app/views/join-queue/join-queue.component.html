@@ -1,0 +1,17 @@
+<div class="container">
+    <h4 class="font-logo">Join Queue</h4>
+    <div *ngIf="store|async as store_;">
+        <span class="h4 mr-2">{{store_.name}},</span>{{store_.location}} - {{store_.city}}
+    </div>
+    <div class="text-center my-4" *ngIf="slot">
+        <div class="my-4">
+            <h6>Slot Available at:</h6>
+            <h5>{{slot.time}}</h5>
+        </div>
+
+        <button type="button" class="btn btn-primary" (click)="joinQueue()">Join Queue</button>
+    </div>
+    <div class="text-muted text-center my-4" *ngIf="!slot">
+        <h3>No slots available today. ;(</h3>
+    </div>
+</div>

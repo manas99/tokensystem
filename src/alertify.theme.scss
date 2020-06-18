@@ -1,0 +1,131 @@
+/**
+ * alertifyjs 1.13.1 http://alertifyjs.com
+ * AlertifyJS is a javascript framework for developing pretty browser dialogs and notifications.
+ * Copyright 2019 Mohammad Younes <Mohammad@alertifyjs.com> (http://alertifyjs.com)
+ * Licensed under GPL 3 <https://opensource.org/licenses/gpl-3.0>*/
+.alertify {
+    color: #fff;
+	.ajs-dimmer {
+        //background-color: #000;
+        //opacity: .5;
+		background-color: #2c3d28;
+		opacity: .9;
+	}
+	.ajs-dialog {
+		max-width: 600px;
+		min-height: 122px;
+		//background-color: #fff;
+        background-color: transparent;
+		//border: 1px solid rgba(0, 0, 0, 0.2);
+		//-webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+		//box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+		//border-radius: 6px;
+	}
+	.ajs-header {
+		//color: #333;
+		//border-bottom: 1px solid #e5e5e5;
+		//border-radius: 6px 6px 0 0;
+		//font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+		font-size: 20px;
+        background-color: transparent;
+        @extend .font-logo;
+	}
+	.ajs-body {
+		//font-family: 'Roboto', sans-serif;
+		//color: black;
+        .ajs-content{
+            padding: 0px;
+        }
+	}
+	.ajs-footer {
+		//background-color: #fff;
+		padding: 15px;
+		//border-top: 1px solid #e5e5e5;
+		//border-radius: 0 0 6px 6px;
+        background-color: transparent;
+
+        .ajs-buttons {
+            .ajs-button {
+                background-color: transparent;
+                //color: #000;
+                border: 0;
+                font-size: 14px;
+                font-weight: bold;
+                text-transform: uppercase;
+                //&:focus{
+                //	outline:auto 5px #498EFF;
+                //	box-shadow: 0px 0px 4px 0px #498EFF;
+                //}
+                &.ajs-ok {
+                    color: #fff;
+                }
+            }
+        }
+	}
+
+    .ajs-commands {
+        position: absolute;
+        right: 4px;
+        margin: -14px 24px 0 0;
+        z-index: 2;
+
+        button {
+            display: none;
+            width: 30px;
+            height: 30px;
+            margin-left: 10px;
+            padding: 10px;
+            border: 0;
+            background-color: transparent;
+            background-repeat: no-repeat;
+            background-position: center;
+            cursor: pointer;
+
+            &.ajs-close {
+                //background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABZ0RVh0Q3JlYXRpb24gVGltZQAwNy8xMy8xNOrZqugAAAAcdEVYdFNvZnR3YXJlAEFkb2JlIEZpcmV3b3JrcyBDUzbovLKMAAAAh0lEQVQYlY2QsQ0EIQwEB9cBAR1CJUaI/gigDnwR6NBL/7/xWLNrZ2b8EwGotVpr7eOitWa1VjugiNB7R1UPrKrWe0dEAHBbXUqxMQbeewDmnHjvyTm7C3zDwAUd9c63YQdUVdu6EAJzzquz7HXvTiklt+H9DQFYaxFjvDqllFyMkbXWvfpXHjJrWFgdBq/hAAAAAElFTkSuQmCC);
+                background-size: contain;
+                background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc1MTInIGhlaWdodD0nNTEyJyB2aWV3Qm94PScwIDAgNTEyIDUxMic+CiAgICA8dGl0bGU+aW9uaWNvbnMtdjUtbTwvdGl0bGU+CiAgICA8cG9seWdvbiBzdHlsZT0nZmlsbDojZGNkY2RjO3N0cm9rZTojZGNkY2RjOycgcG9pbnRzPSc0MDAgMTQ1LjQ5IDM2Ni41MSAxMTIgMjU2IDIyMi41MSAxNDUuNDkgMTEyIDExMiAxNDUuNDkgMjIyLjUxIDI1NiAxMTIgMzY2LjUxIDE0NS40OSA0MDAgMjU2IDI4OS40OSAzNjYuNTEgNDAwIDQwMCAzNjYuNTEgMjg5LjQ5IDI1NiA0MDAgMTQ1LjQ5Jy8+Cjwvc3ZnPgo=")
+            }
+
+            &.ajs-maximize {
+                background-size: contain;
+                background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc1MTInIGhlaWdodD0nNTEyJyB2aWV3Qm94PScwIDAgNTEyIDUxMic+CiAgICA8dGl0bGU+aW9uaWNvbnMtdjUtYjwvdGl0bGU+CiAgICA8cG9seWxpbmUgcG9pbnRzPSc0MzIgMzIwIDQzMiA0MzIgMzIwIDQzMicgc3R5bGU9J2ZpbGw6bm9uZTtzdHJva2U6I2RjZGNkYztzdHJva2UtbGluZWNhcDpzcXVhcmU7c3Ryb2tlLW1pdGVybGltaXQ6MTA7c3Ryb2tlLXdpZHRoOjMycHgnLz4KICAgIDxsaW5lIHgxPSc0MjEuOCcgeTE9JzQyMS43NycgeDI9JzMwNCcgeTI9JzMwNCcgc3R5bGU9J2ZpbGw6bm9uZTtzdHJva2U6I2RjZGNkYztzdHJva2UtbGluZWNhcDpzcXVhcmU7c3Ryb2tlLW1pdGVybGltaXQ6MTA7c3Ryb2tlLXdpZHRoOjMycHgnLz4KICAgIDxwb2x5bGluZSBwb2ludHM9JzgwIDE5MiA4MCA4MCAxOTIgODAnIHN0eWxlPSdmaWxsOm5vbmU7c3Ryb2tlOiNkY2RjZGM7c3Ryb2tlLWxpbmVjYXA6c3F1YXJlO3N0cm9rZS1taXRlcmxpbWl0OjEwO3N0cm9rZS13aWR0aDozMnB4Jy8+CiAgICA8bGluZSB4MT0nOTAuMicgeTE9JzkwLjIzJyB4Mj0nMjA4JyB5Mj0nMjA4JyBzdHlsZT0nZmlsbDpub25lO3N0cm9rZTojZGNkY2RjO3N0cm9rZS1saW5lY2FwOnNxdWFyZTtzdHJva2UtbWl0ZXJsaW1pdDoxMDtzdHJva2Utd2lkdGg6MzJweCcvPgogICAgPHBvbHlsaW5lIHBvaW50cz0nMzIwIDgwIDQzMiA4MCA0MzIgMTkyJyBzdHlsZT0nZmlsbDpub25lO3N0cm9rZTojZGNkY2RjO3N0cm9rZS1saW5lY2FwOnNxdWFyZTtzdHJva2UtbWl0ZXJsaW1pdDoxMDtzdHJva2Utd2lkdGg6MzJweCcvPgogICAgPGxpbmUgeDE9JzQyMS43NycgeTE9JzkwLjInIHgyPSczMDQnIHkyPScyMDgnIHN0eWxlPSdmaWxsOm5vbmU7c3Ryb2tlOiNkY2RjZGM7c3Ryb2tlLWxpbmVjYXA6c3F1YXJlO3N0cm9rZS1taXRlcmxpbWl0OjEwO3N0cm9rZS13aWR0aDozMnB4Jy8+CiAgICA8cG9seWxpbmUgcG9pbnRzPScxOTIgNDMyIDgwIDQzMiA4MCAzMjAnIHN0eWxlPSdmaWxsOm5vbmU7c3Ryb2tlOiNkY2RjZGM7c3Ryb2tlLWxpbmVjYXA6c3F1YXJlO3N0cm9rZS1taXRlcmxpbWl0OjEwO3N0cm9rZS13aWR0aDozMnB4Jy8+CiAgICA8bGluZSB4MT0nOTAuMjMnIHkxPSc0MjEuOCcgeDI9JzIwOCcgeTI9JzMwNCcgc3R5bGU9J2ZpbGw6bm9uZTtzdHJva2U6I2RjZGNkYztzdHJva2UtbGluZWNhcDpzcXVhcmU7c3Ryb2tlLW1pdGVybGltaXQ6MTA7c3Ryb2tlLXdpZHRoOjMycHgnLz4KPC9zdmc+Cg==")
+            }
+        }
+        //button
+    }
+
+    &.ajs-resizable, &.ajs-maximized:not(.ajs-resizable) {
+    	.ajs-content {
+    		top: 58px;
+    		bottom: 68px;
+    	}
+    }
+
+}
+
+.alertify-notifier {
+	.ajs-message {
+		background: rgba(255, 255, 255, 0.95);
+		color: #000;
+		text-align: center;
+		//border: solid 1px #ddd;
+		border-radius: 2px;
+
+        &.ajs-success {
+    		color: #fff;
+    		background: rgba(91, 189, 114, 0.95);
+    	}
+
+        &.ajs-error {
+    		color: #fff;
+    		background: rgba(230, 36, 36, 0.95);
+    	}
+
+        &.ajs-warning {
+    		background: rgba(252, 248, 215, 0.95);
+    		border-color: #999;
+    	}
+
+	}
+}
